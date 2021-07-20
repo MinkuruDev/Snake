@@ -18,25 +18,22 @@ namespace Snake
         Queue<Point> snakeBody = new Queue<Point>();
         Point headPoint, tailPoint, foodPoint;
         bool[,] visit;
-        bool[] move = new bool[4];
-        int score;
+        int score, difficulity;
         Timer timer = new Timer();
 
         enum Direction
         {
             up, down, left, right
         }
-        Direction currentDirection = Direction.up;
+        Direction currentDirection;
 
         public frmMain()
         {
             InitializeComponent();
-            startTimer();
-            txtMove.KeyDown += TxtMove_KeyDown;
-            
+            this.KeyDown += FrmMain_KeyDown;
         }
 
-        private void TxtMove_KeyDown(object sender, KeyEventArgs e)
+        private void FrmMain_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -65,42 +62,30 @@ namespace Snake
 
         private void startTimer()
         {
-            timer.Interval = 100;
-            timer.Tick += Timer_Tick;
+            timer.Interval = 300 - 30 * difficulity;
             timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            snakeMove(currentDirection);
+            snakeMove();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-            for(int i = 0; i<cols; i++) {
-                for(int j=0; j<rows; j++)
-                {
-                    Label label = new Label();
-                    label.Location = new Point(i * snakeSize , j * snakeSize + 50);
-                    label.BackColor = Color.Gray;
-                    label.Size = new Size(snakeSize, snakeSize);
-                    label.Enabled = false;
+            createGround();
+            createSnakeBody();
+            timer.Tick += Timer_Tick;
+        }
 
-                    labelList.Add(label);
-                    this.Controls.Add(label);
-                }
-            }
-
-            visit = new bool[cols, rows];
-            score = 0;
-
+        private void createSnakeBody()
+        {
             // add snake tail to queue
-            tailPoint = new Point(20, 11);
+            tailPoint = new Point(cols / 2, rows - 1);
             snakeBody.Enqueue(tailPoint);
 
             // add snake head to queue
-            headPoint = new Point(20, 10);
+            headPoint = new Point(cols / 2, rows - 2);
             snakeBody.Enqueue(headPoint);
 
             Label head = getLabelByPositon(headPoint);
@@ -110,15 +95,79 @@ namespace Snake
             Label tail = getLabelByPositon(tailPoint);
             visit[tailPoint.X, tailPoint.Y] = true;
             tail.BackColor = Color.Red;
-            
-            generateFood();
-            
         }
 
-        void snakeMove(Direction direction)
+        private void createGround()
+        {
+            for (int i = 0; i < cols; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    Label label = new Label();
+                    label.Location = new Point(i * snakeSize, j * snakeSize + 50);
+                    label.BackColor = Color.Green;
+                    label.Size = new Size(snakeSize, snakeSize);
+                    label.Enabled = false;
+
+                    labelList.Add(label);
+                    this.Controls.Add(label);
+                }
+            }
+            
+            difficulity = Convert.ToInt32(lblDifficulity.Text);
+            visit = new bool[cols, rows];
+        }
+
+        private void btnDecrease_Click(object sender, EventArgs e)
+        {
+            if (difficulity == 1) return;
+            difficulity--;
+            lblDifficulity.Text = difficulity.ToString();
+        }
+
+        private void btnIncrease_Click(object sender, EventArgs e)
+        {
+            if (difficulity == 9) return;
+            difficulity++;
+            lblDifficulity.Text = difficulity.ToString();
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            resetGround();
+            createSnakeBody();
+            generateFood();
+            startTimer();
+            btnDecrease.Enabled = false;
+            btnIncrease.Enabled = false;
+            btnStart.Enabled = false;
+        }
+
+        private void resetGround()
+        {
+            foreach(Label label in labelList)
+            {
+                label.BackColor = Color.Green;
+            }
+            
+            for(int i = 0; i<cols; i -= -1)
+            {
+                for(int j = 0; j<rows; j -= -1)
+                {
+                    visit[i, j] = false;
+                }
+            }
+
+            currentDirection = Direction.up;
+            snakeBody.Clear();
+            score = 0;
+            lblScore.Text = "Score: 0";
+        }  
+
+        void snakeMove()
         {
             Point temp = new Point(headPoint.X, headPoint.Y);
-            switch (direction)
+            switch (currentDirection)
             {
                 case Direction.up:
                     temp.Y--;
@@ -138,8 +187,7 @@ namespace Snake
 
             if (checkGameOver(temp))
             {
-                timer.Stop();
-                MessageBox.Show("Game over");
+                gameOver();
                 return;
             }
 
@@ -149,22 +197,32 @@ namespace Snake
 
             if(headPoint.X == foodPoint.X && headPoint.Y == foodPoint.Y)
             {
-                lblScore.Text = "Score: " + ++score;
+                score += difficulity;
+                lblScore.Text = "Score: " + score;
                 generateFood();
             }
             else
             {
                 tailPoint = snakeBody.Dequeue();
                 Label tail = getLabelByPositon(tailPoint);
-                tail.BackColor = Color.Gray;
+                tail.BackColor = Color.Green;
                 visit[tailPoint.X, tailPoint.Y] = false;
             }
         }
 
-        private bool checkGameOver(Point temp)
+        private void gameOver()
         {
-            int x = temp.X;
-            int y = temp.Y;
+            timer.Stop();
+            MessageBox.Show("Game over\n" + lblScore.Text);
+            btnStart.Enabled = true;
+            btnDecrease.Enabled = true;
+            btnIncrease.Enabled = true;
+        }
+
+        private bool checkGameOver(Point point)
+        {
+            int x = point.X;
+            int y = point.Y;
             return x < 0 || x >= cols || y < 0 || y >= rows || visit[x, y];
         }
 
@@ -184,14 +242,9 @@ namespace Snake
             food.BackColor = Color.Orange;
         }
 
-        Label getLabelByPositon(int x, int y)
-        {
-            return labelList[x * rows + y];
-        }
-
         Label getLabelByPositon(Point p)
         {
-            return getLabelByPositon(p.X, p.Y);
+            return labelList[p.X * rows + p.Y];
         }
     }
 }
