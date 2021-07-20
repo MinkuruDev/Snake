@@ -6,7 +6,6 @@ C:\Coding\CSharp\Snake\Snake\bin\Debug\net5.0-windows\Snake.dll
 C:\Coding\CSharp\Snake\Snake\bin\Debug\net5.0-windows\ref\Snake.dll
 C:\Coding\CSharp\Snake\Snake\bin\Debug\net5.0-windows\Snake.pdb
 C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\Snake.csproj.AssemblyReference.cache
-C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\Snake.Form1.resources
 C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\Snake.csproj.GenerateResource.cache
 C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\Snake.GeneratedMSBuildEditorConfig.editorconfig
 C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\Snake.AssemblyInfoInputs.cache
@@ -16,3 +15,4 @@ C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\Snake.dll
 C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\ref\Snake.dll
 C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\Snake.pdb
 C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\Snake.genruntimeconfig.cache
+C:\Coding\CSharp\Snake\Snake\obj\Debug\net5.0-windows\Snake.frmMain.resources

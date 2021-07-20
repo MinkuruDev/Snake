@@ -1,7 +1,7 @@
 ﻿
 namespace Snake
 {
-    partial class Form1
+    partial class frmMain
     {
         /// <summary>
         ///  Required designer variable.
@@ -30,6 +30,7 @@ namespace Snake
         private void InitializeComponent()
         {
             this.lblScore = new System.Windows.Forms.Label();
+            this.txtMove = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lblScore
@@ -42,15 +43,25 @@ namespace Snake
             this.lblScore.TabIndex = 0;
             this.lblScore.Text = "Score: 0";
             // 
-            // Form1
+            // txtMove
+            // 
+            this.txtMove.Location = new System.Drawing.Point(296, 20);
+            this.txtMove.Name = "txtMove";
+            this.txtMove.ReadOnly = true;
+            this.txtMove.Size = new System.Drawing.Size(71, 27);
+            this.txtMove.TabIndex = 1;
+            // 
+            // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(761, 512);
+            this.Controls.Add(this.txtMove);
             this.Controls.Add(this.lblScore);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.KeyPreview = true;
+            this.Name = "frmMain";
+            this.Text = "Snake";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -60,6 +71,7 @@ namespace Snake
         #endregion
 
         private System.Windows.Forms.Label lblScore;
+        private System.Windows.Forms.TextBox txtMove;
     }
 }
 
